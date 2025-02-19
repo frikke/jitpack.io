@@ -32,12 +32,13 @@ If you are using Gradle to get a GitHub project into your build, you will need t
 
 To see an example head to [jitpack.io](https://jitpack.io) and 'Look Up' a GitHub repository by url.
 
-Gradle example:
+Gradle example in **settings.gradle** file:
 ```gradle
-    allprojects {
+    dependencyResolutionManagement {
+        repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
         repositories {
             mavenCentral()
-            maven { url "https://jitpack.io" }
+            maven { url 'https://jitpack.io' }
         }
     }
     dependencies {
@@ -45,7 +46,7 @@ Gradle example:
     }
 ```
 
-**Note:**  For [security](https://blog.autsoft.hu/a-confusing-dependency/) and performance reasons it is recommended to exclude the dependency search from other repositories using [filtering](https://docs.gradle.org/current/userguide/declaring_repositories.html#sec:repository-content-filtering).
+**Note:**  For [security](https://zsmb.co/a-confusing-dependency/) and performance reasons it is recommended to exclude the dependency search from other repositories using [filtering](https://docs.gradle.org/current/userguide/declaring_repositories_adv.html#sec:repository-content-filtering).
 
 ```gradle
       maven { 
@@ -227,7 +228,16 @@ If you are using a custom domain or BitBucket, use:
 (https://jitpack.io/#org.bitbucket.User/Repo)
 ```
 
-Or, if you prefer the flat-squared style:
+For download statistics badges you can use:
+```
+![Weekly download statistics](https://jitpack.io/v/USER/REPO/week.svg)
+![Monthly download statistics](https://jitpack.io/v/USER/REPO/month.svg)
+```
+![Weekly download statistics](https://jitpack.io/v/jitpack/maven-simple/week.svg)
+![Monthly download statistics](https://jitpack.io/v/jitpack/maven-simple/month.svg)
+
+
+If you prefer the flat-squared style:
 
 ```
 https://jitpack.io/v/User/Repo.svg?style=flat-square
