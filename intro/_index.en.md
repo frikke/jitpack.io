@@ -40,17 +40,38 @@ If you are using Gradle to get a GitHub project into your build, you will need t
 
 To see an example head to [jitpack.io](https://jitpack.io) and 'Look up' a GitHub repository by url.
 
-Gradle example:
+In your **settings.gradle** file (Groovy DSL):
 ```gradle
-    allprojects {
-        repositories {
-            mavenCentral()
-            maven { url "https://jitpack.io" }
-        }
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
-    dependencies {
-        implementation 'com.github.User:Repo:Version'
+}
+```
+Or in **settings.gradle.kts** (Kotlin DSL):
+```kotlin
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }
     }
+}
+```
+
+Then add the dependency in your module's **build.gradle** (Groovy DSL):
+```gradle
+dependencies {
+    implementation 'com.github.User:Repo:Version'
+}
+```
+Or in **build.gradle.kts** (Kotlin DSL):
+```kotlin
+dependencies {
+    implementation("com.github.User:Repo:Version")
+}
 ```
 
 **Note:**  For [security](https://zsmb.co/a-confusing-dependency/) and performance reasons it is recommended to exclude the dependency search from other repositories using [filtering](https://docs.gradle.org/current/userguide/declaring_repositories_adv.html#sec:repository-content-filtering).
@@ -91,13 +112,13 @@ configurations.all {
 ```
 Building a new snapshot may take some time so it might be necessary to increase Gradle timeouts ([FAQ](/faq)).
 
-Or you could also run Gradle from the command line with the `--refresh-dependencies` flag. See the [Gradle documentation](https://docs.gradle.org/2.5/userguide/dependency_management.html#changing-module-cache-control) for more information on how to configure caching for *changing* dependencies.
+Or you could also run Gradle from the command line with the `--refresh-dependencies` flag. See the [Gradle documentation](https://docs.gradle.org/current/userguide/dynamic_versions.html#sec:controlling_dependency_caching) for more information on how to configure caching for *changing* dependencies.
 
 *Note* If using Android Studio, don't forget to press File -> Synchronize after updating to a newer snapshot.
 
 Also see the [Guide to building](/building) for more details and instructions on building multi-module projects.
 
-If the project doesn't have any [GitHub Releases](https://github.com/blog/1547-release-your-software), you can get the latest snapshot build. In this case, use the short commit id as the version. You can also place tags on other branches and then build using those tags.
+If the project doesn't have any [GitHub Releases](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository), you can get the latest snapshot build. In this case, use the short commit id as the version. You can also place tags on other branches and then build using those tags.
 
 *Tip:* You can also automate GitHub releases with [Gradle release & version management plugin](https://github.com/allegro/axion-release-plugin)
 
@@ -116,7 +137,7 @@ Publishing on JitPack
 
 Publishing your library on JitPack is very simple:
 
-- Create a [GitHub Release](https://github.com/blog/1547-release-your-software)  
+- Create a [GitHub Release](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository)  
 
 As long as there's a build file in your repository and it can install your library in the local Maven repository, it is sufficient for JitPack. See the [Guide to building](/building) on how to publish JVM libraries and [Guide to Android](/android) on how to publish Android libraries.
 

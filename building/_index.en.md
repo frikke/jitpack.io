@@ -16,26 +16,53 @@ If the project has a `build.gradle` file then it will be built using Gradle othe
 
 ## Gradle projects
 
-Projects using Gradle need to have either the [`maven`](https://docs.gradle.org/current/userguide/maven_plugin.html) or [`maven-publish`](https://docs.gradle.org/current/userguide/publishing_maven.html) plugin enabled. For example, if you add this to your build file:
+Projects using Gradle should use the [`maven-publish`](https://docs.gradle.org/current/userguide/publishing_maven.html) plugin (standard and required for Gradle 7+).
 
+Add this to your build file:
+
+In **build.gradle** (Groovy DSL):
 ```gradle
-apply plugin: 'maven'
-    
+plugins {
+    id 'maven-publish'
+}
+
 group = 'com.github.YourUsername'
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
+}
 ```
 
-then JitPack will run:
+Or in **build.gradle.kts** (Kotlin DSL):
+```kotlin
+plugins {
+    `maven-publish`
+}
 
-```sh
-./gradlew install
+group = "com.github.YourUsername"
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+        }
+    }
+}
 ```
 
-to install the jar and pom file in its local maven repository. With `maven-publish` plugin it will run
+With the `maven-publish` plugin, JitPack will run:
 ```sh
 ./gradlew build publishToMavenLocal
 ```
+to build and install the jar and pom files into its local maven repository.
 
-Note that if your project isn't using a Gradle wrapper JitPack will build it with a recent version of Gradle. Therefore it is recommended to use the wrapper.
+*(Note: Legacy Gradle projects using Gradle versions prior to 7.0 that use `apply plugin: 'maven'` will be built with `./gradlew install`, but the `maven` plugin has been removed in Gradle 7.0+).*
+
+Note that if your project isn't using a Gradle wrapper, JitPack will build it with a default version of Gradle. Therefore it is strongly recommended to use the Gradle wrapper (`./gradlew`).
 
 ### Example projects
 
@@ -200,12 +227,12 @@ You can create a `jitpack.yml` file in the root of your repository and override 
 
 ```yml
 jdk:
-  - openjdk9
+  - openjdk17
 before_install:
    - ./custom_setup.sh
 install:
    - echo "Running a custom install command"
-   - ./gradlew clean install -xtest
+   - ./gradlew clean build publishToMavenLocal -x test
 env:
    MYVAR: "custom environment variable"
 ```
@@ -221,7 +248,7 @@ Additionally, you can configure environment variables in the Web UI on https://j
 
 ## Java version
 
-JitPack will compile projects using OpenJDK Java 8. See the example projects on how to set a different target version in your build file. 
+JitPack compiles projects using OpenJDK Java 8 by default for legacy compatibility. For modern JVM and Android projects (such as Gradle 7+, Gradle 8+, Spring Boot 3+, or AGP 8+), you should specify a newer LTS version (e.g. Java 17 or Java 21) in a `jitpack.yml` file.
 
 Maven projects that specify a target version in their pom will be built with that target version.
 
@@ -230,14 +257,14 @@ If your project uses Travis or Circle CI then JitPack will read the lowest jdk v
 Alternatively create a `jitpack.yml` file in the root of your repository and specify a jdk version:
 ```yml
 jdk:
-  - openjdk9
+  - openjdk17
 ```
 
 If your project requires a specific Java version then you can use [SDKMAN](https://sdkman.io) in `jitpack.yml`:
 ```yml
 before_install:
-   - sdk install java 22-open
-   - sdk use java 22-open
+   - sdk install java 21-open
+   - sdk use java 21-open
 ```
 
 # Troubleshooting

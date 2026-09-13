@@ -6,35 +6,34 @@ chapter: true
 copyright: JitPack 2026
 ---
 
-Frequently Asked Questions
--
+# Frequently Asked Questions
 
-**Can artifacts be deleted from JitPack?**
+### Can artifacts be deleted from JitPack?
 
 Public repository artifacts on JitPack are immutable after 7 days of publishing. You will see an indicator in the list of versions when a build becomes frozen (snowflake icon). Within the first 7 days they can be re-built to fix any release issues. Even then we recommend creating a patch release instead.
 
 JitPack will also keep hosting artifacts after the originating git repository is deleted. To delete a build you need to have git push permissions to your git repository.
 
-**What happens if a tag or repository is deleted on GitHub?**
+### What happens if a tag or repository is deleted on GitHub?
 
 If the project was already built then JitPack will continue serving the existing artifacts. It will not rebuild the project at the new tag. 
 In case you need to redo a release the best option is to create a new version on GitHub.
 
-**How can I get the latest snapshot of a repository?**
+### How can I get the latest snapshot of a repository?
 
 In your build file set the version of your dependency to `anyBranch-SNAPSHOT`. This is useful during development but we don't recommend to be used in production.
 
-You can also customize how often you want Gradle to check for new snapshots - see [the documentation](https://docs.gradle.org/1.8-rc-1/userguide/dependency_management.html#sec:controlling_caching). 
+You can also customize how often you want Gradle to check for new snapshots - see [the Gradle documentation](https://docs.gradle.org/current/userguide/dynamic_versions.html#sec:controlling_dependency_caching). 
 
-**Can I use JitPack with private repositories?**
+### Can I use JitPack with private repositories?
 
 Yes. See [private repositories](https://jitpack.io/private)
 
-**Can I keep my source code private but make the library public?**
+### Can I keep my source code private but make the library public?
 
 Yes. See [Artifact Sharing](/private/#artifact-sharing)
 
-**Can I use my own domain name?**
+### Can I use my own domain name?
 
 Yes. We support mapping your domain name to your GitHub organization. Then instead of 'com.github.yourcompany' groupId you can use 'com.yourcompany'. 
 
@@ -46,7 +45,7 @@ Steps:
 
 Example: https://jitpack.io/#io.jitpack/gradle-simple
 
-**Why am I getting `failed to resolve` error in Gradle?**
+### Why am I getting `failed to resolve` error in Gradle?
 
 There could be a number of reasons so we need to find the cause of this error.
 The first thing to check is if the build was successful by doing a Look Up on https://jitpack.io. 
@@ -66,19 +65,19 @@ To re-authorize JitPack for private repositories:
 
 If the error is unclear, feel free to contact Support.
 
-**Can I use JitPack with my self-hosted GitLab server?**
+### Can I use JitPack with my self-hosted GitLab server?
 
 Yes. Register your server in your [user page](https://jitpack.io/w/user)
 
-**Can I use tag folders?**
+### Can I use tag folders?
 
 Yes. Tag folders such as `feature/abc` are supported. Set the dependency version as `feature~abc`.
 
-**Can I use branches with slashes in them?**
+### Can I use branches with slashes in them?
 
 Yes. Branch names such as `branch/abc` are supported. Set the dependency version as `branch~abc`.
 
-**Will my builds be reproducible?**
+### Will my builds be reproducible?
 
 Absolutely. Once JitPack builds a project it keeps the build artifacts (jar, aar, ... files) and continues to serve those for all subsequent requests.
 
@@ -86,15 +85,15 @@ JitPack encourages reproducible builds in general since you need to have a worki
 
 Note that -SNAPSHOT version will always provide the latest build therefore its only recommended during development and not in production.
 
-**How are the artifacts you build licensed?**
+### How are the artifacts you build licensed?
 
 Build artifact licenses are specified in the originating source code repositories. 
 
-**Is JitPack like depending on source code repositories in other languages?**
+### Is JitPack like depending on source code repositories in other languages?
 
 Not really. With JitPack you specify which exact version you want and JitPack builds it. The author of the repository controls when to release a new version using GitHub's releases so from a consumer's perspective it's a typical package repository. 
 
-**How are the builds secured?**
+### How are the builds secured?
 
 Each project is built in its own Docker container that only has access to the project's source code. It doesn't have access to other projects or build artifacts. Containers run only with normal user privileges (non root). 
 
@@ -104,32 +103,32 @@ Private repository builds are protected by authentication and require an access 
 
 If you'd like to report a security issue please contact security@jitpack.io
 
-**Can I rebuild my project?**
+### Can I rebuild my project?
 
 If your first build wasn't successful you can rebuild it. If you Sign In on JitPack.io then you'll be able to remove the old build and re-requesting it will trigger a new build. 
 
-See also /building/#rebuilding
+See also [Rebuilding](/building/#rebuilding)
 
-**Can version ranges be used with JitPack?**
+### Can version ranges be used with JitPack?
 
 You can use version ranges and Gradle's dynamic versions for releases. Currently they only resolve to releases that have been built.
-`compile 'com.github.User:Repo:1.+'`
+`implementation 'com.github.User:Repo:1.+'`
 
-**How long can builds take?**
+### How long can builds take?
 
 Up to 15 minutes
 
-**Is JitPack similar to Maven Central?**
+### Is JitPack similar to Maven Central?
 
 JitPack is a public maven repository and serves maven artifacts. In that sense it is similar to Maven Central. However, JitPack takes a completely different approach to how you get your artifacts in the repository. With Maven Central you build the artifacts yourself and then upload them. With JitPack you create a git tag for a release and it will build the artifacts from source.
 
-**How do I solve `peer not authenticated` error in Gradle?**
+### How do I solve `peer not authenticated` error in Gradle?
 
 If you are running Gradle on Linux you might get the `peer not authenticated` error. There are at least two ways to solve this:
- - Upgrade to Gradle 2.11 or newer
- - Run Gradle with Java 8. The project itself doesn't need to use Java 8.
+ - Upgrade to a modern Gradle version (7.x or 8.x)
+ - Run Gradle with Java 8 or higher. The project itself doesn't need to use Java 8.
 
-**Can I publish an existing .jar or .aar file?**
+### Can I publish an existing .jar or .aar file?
 
 You can but the recommended way is always to build from source.
 
@@ -141,12 +140,12 @@ There are a couple of ways of dealing with this:
   
 With option 2. the third party artifact becomes available as a Gradle/Maven dependency on JitPack.
 
-**Does JitPack provide artifact checksums and signing**
+### Does JitPack provide artifact checksums and signing
 
 JitPack creates sha and md5 checksums for all artifacts.
 Artifact signing is not yet available; however, we are planning to add it as well.
 
-**How do I resolve `Read timed out` error in Gradle?**
+### How do I resolve `Read timed out` error in Gradle?
 
 Since version 4.3 Gradle has reduced HTTP timeouts which can cause downloads to time out when JitPack waits for a build to finish.
 To increase timeouts add these settings to your gradle.properties file:
@@ -155,17 +154,17 @@ systemProp.org.gradle.internal.http.connectionTimeout=180000
 systemProp.org.gradle.internal.http.socketTimeout=180000
 ```
 
-**Where do I find invoices for my JitPack Subscription?**
+### Where do I find invoices for my JitPack Subscription?
 
 Invoices are available on your user page - Sign In and click on your username (https://jitpack.io/w/user).
 You can also receive invoices by email if you add an email address on your user page. 
 
-**Change my repository to public but still got the message `No access token`**
+### Change my repository to public but still got the message `No access token`
 
 When JitPack detects a private repository it caches this result for 1 hour. So, after you change your repository to public you still need to wait 1 hour to be able to access it without authentication.
 
 [jitpack.io/issues/986](https://github.com/jitpack/jitpack.io/issues/986#issuecomment-265189883)
 
-**Other questions**
+### Other questions
 
 Contact Support or open an [issue on GitHub](https://github.com/jitpack/jitpack.io/issues)

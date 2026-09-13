@@ -120,6 +120,7 @@ Once you are set up you can try installing one of your private repositories:
 
 2. Follow the instructions and add credentials to your build file if using Gradle:
 
+In **build.gradle** (Groovy DSL):
 ```gradle
 repositories {
 	maven {
@@ -128,12 +129,23 @@ repositories {
 	}
 }
 ```
+Or in **build.gradle.kts** (Kotlin DSL):
+```kotlin
+repositories {
+    maven {
+        url = uri("https://jitpack.io")
+        credentials {
+            username = project.findProperty("authToken") as String?
+        }
+    }
+}
+```
 
 Then add the dependency to your private repository just like you do with a public one:
 
 ```gradle
 dependencies {
-	compile 'com.github.User:PrivateRepo:Tag'
+	implementation 'com.github.User:PrivateRepo:Tag'
 }
 ```
 
@@ -216,7 +228,7 @@ To enable your own domain name:
 
 Example: [https://jitpack.io/#io.jitpack/gradle-simple](https://jitpack.io/#io.jitpack/gradle-simple)
 
-To check that the DNS TXT record was added run the command `dig txt git.yourcompany.com`. For example:
+To check that the DNS TXT record was added, run the command `dig txt git.yourcompany.com`. For example:
 
 ```
 > dig txt git.jitpack.io
